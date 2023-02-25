@@ -25,10 +25,12 @@
       </div>
       <div class="form-control">
         <label for="author">Select Author</label>
-        
-        <select id="author" name="author">
-          
+        <select id="author" name="author" >
+          <% for (const author of authors) { %>
+        <option value="<%= author.name %>"><%= author.name %></option>
+        <%} %>
         </select>
+        
       </div>
       <button class="btn">Add Post</button>
     </form>
