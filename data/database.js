@@ -14,3 +14,8 @@ function getDB(){
     }
     return database
 }
+
+module.exports = {
+    connectDB:connect,
+    getDB:getDB
+}
