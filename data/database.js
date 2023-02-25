@@ -12,7 +12,7 @@ function getDB(){
     if (!database){
         throw{message: 'Database is not established yet'}   //if no try or catch,  terminate the program.
     }
-    return database
+    return database;
 }
 
 module.exports = {
