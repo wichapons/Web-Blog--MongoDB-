@@ -2,25 +2,22 @@
 <html lang="en">
 
 <head>
-  <%- include('includes/head', { title:posts[0].title  }) %>
+  <%- include('includes/head', { title:posts.title }) %>
   <link rel="stylesheet" href="/styles/posts.css">
 </head>
-
 <body>
   <%- include('includes/header') %>
-    <%for(const post of posts){%>
   <main id="post-detail">
-    <h1><%= post.title %></h1>
+    <h1><%= posts.title %></h1>
     <section id="post-meta">
-      <p><%= post.date %></p>
-      <p><%= post.summary %></p>
+      <p><%= posts.date %></p>
+      <p><%= posts.summary %></p>
     </section>
     <hr>
     <section>
-      <p id="body"><%= post.body %></p>
+      <p id="body"><%= posts.body %></p>
     </section>
   </main>
-    <%}%>
 </body>
 
 </html>

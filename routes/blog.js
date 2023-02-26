@@ -2,6 +2,7 @@ const express = require('express');
 const db = require('../data/database');
 const router = express.Router();
 const mongodb = require('mongodb');
+const ObjectId = mongodb.ObjectId;
 
 router.get('/', function(req, res) {
   res.redirect('/posts');
@@ -9,17 +10,26 @@ router.get('/', function(req, res) {
 
 router.get('/posts', async function(req, res) {
   const postDetails = await db.getDB().collection('posts').find({},{title:1,summary:1,'author.name':1}).toArray();
+  console.log(postDetails[0]._id);
   res.render('posts-list',{posts:postDetails});
 });
 
 router.get('/view/:id', async function(req, res) {
   let postID = req.params.id;
-  console.log(postID);
+  //console.log(postID);
   //let authorID = new mongodb.ObjectId('postID')
-  let postDetails = await db.getDB().collection('posts').find({},{_id:postID}).toArray();
-  console.log(postDetails);
+  let postDetails = await db.getDB().collection('posts').findOne({_id:new ObjectId(postID)});
+  //console.log(postDetails);
   //const postDetails = await db.getDB().collection('posts').find({},{title:1,summary:1,'author.name':1}).toArray();
   res.render('post-detail',{posts:postDetails});
+});
+
+router.get('/post/edit/:id',async (req,res)=>{
+  let postID = req.params.id;
+  //console.log(postID);
+  let postDetails = await db.getDB().collection('posts').findOne({_id:new ObjectId(postID)});
+  //console.log(postDetails);
+  res.render('update-post',{posts:postDetails});
 });
 
 router.get('/new-post', async function(req, res) {
@@ -30,8 +40,7 @@ router.get('/new-post', async function(req, res) {
 router.post('/post', async function(req, res) {
   
   let postDetails = req.body;
-
-  let authorID = new mongodb.ObjectId(postDetails.author) //convert Author ID that's sent from the form which is STRING to ObjectID to make MongoDB understand  
+  let authorID = new ObjectId(postDetails.author) //The ObjectId constructor function generates a 12-byte hexadecimal string, which consists of a 4-byte timestamp (representing the time the ObjectId was created), a 5-byte random value, and a 3-byte incrementing counter. This ensures that every ObjectId is unique and sortable by creation time.  
   let author = await db.getDB().collection('authors').findOne({_id:authorID});
   let newPost = {
     title:postDetails.title,
@@ -47,7 +56,13 @@ router.post('/post', async function(req, res) {
   res.redirect('/');
 });
 
-
+router.post('/update-post/:id',async(req,res)=>{
+  const postId = req.params.id;
+  const postDetails = req.body;
+  console.log(postDetails);
+  await db.getDB().collection('posts').updateOne({_id: new ObjectId(postId)},{$set: {title:postDetails.title,summary:postDetails.summary,content:postDetails.content}});
+  res.redirect('/')
+})
 
 
 module.exports = router;
