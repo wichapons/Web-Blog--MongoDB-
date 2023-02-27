@@ -4,6 +4,7 @@
   <p><%=post.summary%></p>
   <div class="post-actions">
     <button class="btn btn-alt">Delete Post</button>
+    <a href="/post/delete/<%=post._id %>"></a>
     <a href="/post/edit/<%=post._id %>">Edit Post</a>
     <a class="btn" href="/view/<%=post._id %>">View Post</a>
   </div>

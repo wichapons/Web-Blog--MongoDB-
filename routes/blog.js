@@ -37,6 +37,13 @@ router.get('/new-post', async function(req, res) {
   res.render('create-post',{authors:authorsData});
 });
 
+router.get('post/delete/:id',async (req,res)=>{
+  postID = new ObjectId(req.params.id);
+  await db.getDB().collection('posts').deleteOne({_id:postID});
+  res.redirect('/');
+});
+
+
 router.post('/post', async function(req, res) {
   
   let postDetails = req.body;
