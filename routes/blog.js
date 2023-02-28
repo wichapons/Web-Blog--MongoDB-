@@ -19,6 +19,12 @@ router.get('/view/:id', async function(req, res) {
   //console.log(postID);
   //let authorID = new mongodb.ObjectId('postID')
   let postDetails = await db.getDB().collection('posts').findOne({_id:new ObjectId(postID)});
+  postDetails.dateForDisplay = postDetails.date.toLocaleDateString('en-US',{
+    weekday:'long',
+    year:'numeric',
+    month:'long',
+    day:'numeric'
+  });
   //console.log(postDetails);
   //const postDetails = await db.getDB().collection('posts').find({},{title:1,summary:1,'author.name':1}).toArray();
   res.render('post-detail',{posts:postDetails});
@@ -37,7 +43,7 @@ router.get('/new-post', async function(req, res) {
   res.render('create-post',{authors:authorsData});
 });
 
-router.get('post/delete/:id',async (req,res)=>{
+router.get('/post/delete/:id',async (req,res)=>{
   postID = new ObjectId(req.params.id);
   await db.getDB().collection('posts').deleteOne({_id:postID});
   res.redirect('/');
